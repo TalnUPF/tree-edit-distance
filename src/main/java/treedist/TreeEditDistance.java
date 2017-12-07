@@ -10,6 +10,10 @@ public class TreeEditDistance implements TreeDistance {
 		this.score = score;
 	}
 
+    public TreeEditDistance() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 	@Override
 	public double calc(Tree t1, Tree t2) {
 		Memoization memo = new Memoization();
