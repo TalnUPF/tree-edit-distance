@@ -15,12 +15,12 @@ public class TreeEditDistance implements TreeDistance {
     }
 
 	@Override
-	public double calc(Tree t1, Tree t2) {
+	public double calc(Tree t1, Tree t2) throws InvalidOperationException {
 		Memoization memo = new Memoization();
 		return calc(t1, t2, memo, null);
 	}
 
-	private double calc(Tree t1, Tree t2, Memoization memo, Mapping edit) {
+	private double calc(Tree t1, Tree t2, Memoization memo, Mapping edit) throws InvalidOperationException {
 		if (t1 == null || t2 == null)
 			throw new NullPointerException();
 		Forest root1 = new Forest(t1);
@@ -32,7 +32,7 @@ public class TreeEditDistance implements TreeDistance {
 		return score;
 	}
 
-	public double calc(Tree t1, Tree t2, Mapping edit) {
+	public double calc(Tree t1, Tree t2, Mapping edit) throws InvalidOperationException {
 		Memoization memo = new Memoization();
 		return calc(t1, t2, memo, edit);
 	}
@@ -65,7 +65,7 @@ public class TreeEditDistance implements TreeDistance {
 		}
 	}
 
-	private double calc(Memoization memo, Forest f1, Forest f2) {
+	private double calc(Memoization memo, Forest f1, Forest f2) throws InvalidOperationException {
 		ForestPair pair = new ForestPair(f1, f2);
 		if (memo.cached(pair))
 			return memo.getScore(pair);
@@ -99,17 +99,17 @@ public class TreeEditDistance implements TreeDistance {
 		return score;
 	}
 
-	private double calcReplaceScore(Memoization memo, Forest f1, Forest f2) {
+	private double calcReplaceScore(Memoization memo, Forest f1, Forest f2) throws InvalidOperationException {
 		double s1 = calc(memo, f1.getInside(), f2.getInside());
 		double s2 = calc(memo, f1.getOutside(), f2.getOutside());
 		return s1 + s2 + score.replace(f1.head(), f2.head());
 	}
 
-	private double calcDeleteScore(Memoization memo, Forest f1, Forest f2) {
+	private double calcDeleteScore(Memoization memo, Forest f1, Forest f2) throws InvalidOperationException {
 		return calc(memo, f1.deleteHead(), f2) + score.delete(f1.head());
 	}
 
-	private double calcInsertScore(Memoization memo, Forest f1, Forest f2) {
+	private double calcInsertScore(Memoization memo, Forest f1, Forest f2) throws InvalidOperationException {
 		return calc(memo, f1, f2.deleteHead()) + score.insert(f2.head());
 	}
 }
